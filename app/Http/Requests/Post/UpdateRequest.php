@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
                 'title' => 'string',
                 'content' => 'string',
                 'is_published' => 'integer',
-                'category_id'=>'',
+                'category'=>'',
                 'tags'=>''
 
         ];

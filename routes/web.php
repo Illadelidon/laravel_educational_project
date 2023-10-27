@@ -9,6 +9,8 @@ use \App\Http\Controllers\Post\ShowController;
 use \App\Http\Controllers\Post\EditController;
 use \App\Http\Controllers\Post\UpdateController;
 use \App\Http\Controllers\Post\DeleteController;
+use \App\Http\Controllers\Admin\Post\IndexPostController;
+use \App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,9 +22,10 @@ use \App\Http\Controllers\Post\DeleteController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class,'index'])->name('home');
+Route::get('/home', [HomeController::class,'index']);
+
+
 
 Route::group(['namespace'=>'Post'],function (){
     Route::get('/post',[IndexController::class,'__invoke'])->name('post.index');
@@ -32,19 +35,27 @@ Route::group(['namespace'=>'Post'],function (){
     Route::get('/post/{post}/edit',[EditController::class,'__invoke'])->name('post.edit');
     Route::patch('/post/{post}',[UpdateController::class,'__invoke'])->name('post.update');
     Route::delete('/post/{post}',[DeleteController::class,'__invoke'])->name('post.delete');
+
+
+});
+Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'admin'],function (){
+    Route::group(['namespace'=>'Post'],function (){
+        Route::get('/post',[IndexPostController::class,'__invoke'])->name('admin.post.index');
+    });
+
 });
 
 
-//Route::get('/post/update',[PostController::class,'update']);
-//Route::get('/post/delete',[PostController::class,'delete']);
-//Route::get('/post/first_or_create',[PostController::class,'firstOrCreate']);
 
 
-//Route::get('/post', function () {
-//    return view('index',['posts'=>'$posts']);
-//})->name('post.index');
 
 Route::get('/main', function () {
     return view('main',['name'=>'Ilya']);
 })->name('main.index');
+
+
+
+
+Auth::routes();
+
 
